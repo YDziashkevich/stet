@@ -34,10 +34,10 @@ class DirectoryController extends Controller
         $rootParent = null;
         $i = 0;
         foreach($rootDirectories as $dir){
-            if($dir!="." && $dir!=".." && $dir != ".idea"){
+            if($dir!="." && $dir!=".." && $dir!=".idea"){
                 $this->DirectoryModel->addDir($dir, null);
             }
-            if(is_dir($dir) && $dir!="." && $dir!=".." && dir != ".idea"){
+            if(is_dir($dir) && $dir!="." && $dir!=".." && $dir!=".idea"){
                 $rootDir[$i]["id"] = $this->DirectoryModel->getLastInsertId();
                 $rootDir[$i]["pathDirectory"] = APP_DEFAULT_DIR."\\".$dir;
             }
@@ -47,19 +47,20 @@ class DirectoryController extends Controller
     }
     private function getDirectory($directory = array())
     {
-        while(empty($directory)){
+        if(!empty($directory)){
             $directories = scandir($directory["pathDirectory"]);
             $i = 0;
             foreach($directories as $dir){
-                if($dir!="." && $dir!=".." && dir != ".idea"){
+                if($dir!="." && $dir!=".." && $dir!=".idea"){
                     $this->DirectoryModel->addDir($dir, $directory["id"]);
                 }
-                if(is_dir($dir) && $dir!="." && $dir!=".." && dir != ".idea"){
+                if(is_dir(APP_BASE_URL."/".$dir) && $dir!="." && $dir!=".." && $dir!=".idea"){
                     $childDir[$i]["id"] = $this->DirectoryModel->getLastInsertId();
                     $childDir[$i]["pathDirectory"] = $directory["pathDirectory"]."\\".$dir;
                 }
-                $this->getDirectory($childDir);
+                ++$i;
             }
+            $this->getDirectory($childDir);
         }
         return true;
     }
