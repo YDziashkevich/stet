@@ -16,12 +16,18 @@ class DirectoryController extends Controller
             $rootDir = $this->rootDirectory();
         }
 
-        var_dump(APP_DEFAULT_DIR);
-        var_dump($rootDir);
+        //var_dump(APP_DEFAULT_DIR);
+        //var_dump($rootDir);
 
         if(isset($rootDir) && !empty($rootDir)){
-            foreach($rootDir as $dir){
-                $this->getDirectory($dir);
+            foreach($rootDir as $directory){
+                $this->getDirectory($directory);
+                //var_dump($directory);
+                //var_dump(is_dir(APP_BASE_URL.$directory["pathDirectory"]."/"));
+                //var_dump(APP_BASE_URL.$directory."/");
+                //var_dump(APP_BASE_URL);
+                var_dump(is_file('stet/index.php'));
+                //var_dump(file_exists("/stet/index.php"));
             }
         }
 
@@ -45,22 +51,20 @@ class DirectoryController extends Controller
         }
         return $rootDir;
     }
-    private function getDirectory($directory = array())
+    private function getDirectory($directory = array(), $parentDir = APP_BASE_URL)
     {
         if(!empty($directory)){
             $directories = scandir($directory["pathDirectory"]);
-            $i = 0;
             foreach($directories as $dir){
                 if($dir!="." && $dir!=".." && $dir!=".idea"){
                     $this->DirectoryModel->addDir($dir, $directory["id"]);
                 }
-                if(is_dir(APP_BASE_URL."/".$dir) && $dir!="." && $dir!=".." && $dir!=".idea"){
-                    $childDir[$i]["id"] = $this->DirectoryModel->getLastInsertId();
-                    $childDir[$i]["pathDirectory"] = $directory["pathDirectory"]."\\".$dir;
+                if(is_dir($parentDir.$dir) && $dir!="." && $dir!=".." && $dir!=".idea"){
+                    $childDir["id"] = $this->DirectoryModel->getLastInsertId();
+                    $childDir["pathDirectory"] = $directory["pathDirectory"]."\\".$dir;
+                    $this->getDirectory($childDir, $parentDir.$dir."/");
                 }
-                ++$i;
             }
-            $this->getDirectory($childDir);
         }
         return true;
     }
