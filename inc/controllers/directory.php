@@ -15,23 +15,11 @@ class DirectoryController extends Controller
         if(isset($_POST["create"]) && !empty($_POST["create"]) && $this->DirectoryModel->isEmptyTable()===false){
             $rootDir = $this->rootDirectory();
         }
-
-        //var_dump(APP_DEFAULT_DIR);
-        //var_dump($rootDir);
-
         if(isset($rootDir) && !empty($rootDir)){
             foreach($rootDir as $directory){
                 $this->getDirectory($directory);
-                //var_dump($directory);
-                //var_dump(is_dir(APP_BASE_URL.$directory["pathDirectory"]."/"));
-                //var_dump(APP_BASE_URL.$directory."/");
-                //var_dump(APP_BASE_URL);
-                var_dump(is_file('stet/index.php'));
-                //var_dump(file_exists("/stet/index.php"));
             }
         }
-
-
         $this->view->render("directory");
     }
     private function rootDirectory()
@@ -51,7 +39,7 @@ class DirectoryController extends Controller
         }
         return $rootDir;
     }
-    private function getDirectory($directory = array(), $parentDir = APP_BASE_URL)
+    private function getDirectory($directory = array(), $parentDir = "")
     {
         if(!empty($directory)){
             $directories = scandir($directory["pathDirectory"]);
@@ -59,7 +47,8 @@ class DirectoryController extends Controller
                 if($dir!="." && $dir!=".." && $dir!=".idea"){
                     $this->DirectoryModel->addDir($dir, $directory["id"]);
                 }
-                if(is_dir($parentDir.$dir) && $dir!="." && $dir!=".." && $dir!=".idea"){
+                clearstatcache();
+                if(is_dir($directory["pathDirectory"]."/".$dir."/") && $dir!="." && $dir!=".." && $dir!=".idea"){
                     $childDir["id"] = $this->DirectoryModel->getLastInsertId();
                     $childDir["pathDirectory"] = $directory["pathDirectory"]."\\".$dir;
                     $this->getDirectory($childDir, $parentDir.$dir."/");
