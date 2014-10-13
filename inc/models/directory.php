@@ -26,4 +26,21 @@ class DirectoryModel extends Model
         $clear = self::getDbc()->query("TRUNCATE TABLE st_directory");
         return $clear;
     }
+    public function getRoot()
+    {
+        $dir = self::getDbc()->query("SELECT name, id FROM st_directory WHERE parentId IS NULL ORDER BY name");
+        return $dir->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public static function getDir($id)
+    {
+        $dir = self::getDbc()->prepare("SELECT name, id FROM st_directory WHERE parentId=:parentId");
+        $dir->execute(array(":parentId"=>$id));
+        return $dir->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public static function delDir($id)
+    {
+        $dir = self::getDbc()->prepare("DELETE FROM st_directory WHERE id=:id");
+        $dir->bindParam(":id", $id, PDO::PARAM_INT);
+        return $dir->execute();
+    }
 }

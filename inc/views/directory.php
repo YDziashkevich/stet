@@ -10,9 +10,21 @@
         </form>
     </div>
 </div>
-
+<div clas="row">
 <div class="span12">
-    <div class="center-text">
-
+    <div class="dir-tree">
+        <ul>
+        <?php
+        if(isset($root) && !empty($root)){
+            foreach($root as $dir){
+                echo "<li>".$dir["name"]."<form method='post'>
+                <input type='hidden' name='idDel' value='$dir[id]' />
+                <input type='submit' class='float_r btn-mini btn btn-danger my-del' name='delDir' value='DEL' /></form>"."</li>"."<br />";
+                echo DirectoryController::getDir($dir["id"]);
+            }
+        }
+        ?>
+        </ul>
     </div>
+</div>
 </div>

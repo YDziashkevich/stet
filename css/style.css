@@ -10,3 +10,26 @@
 .my-link{
     width: 250px;
 }
+.dir-tree{
+    position: relative;
+    margin: 0 auto;
+    width: 400px;
+}
+ul{
+    list-style-type: none;
+}
+.my-del{
+    height: 20px;
+    width: 30px;
+}
+input.my-del {
+    font-size: 10px;
+    margin: 0;
+    padding: 0;
+}
+ul.li.dir-tree{
+    position: relative;
+    float: right;
+    margin: 0;
+    padding: 0;
+}
