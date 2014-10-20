@@ -32,33 +32,43 @@ class DirectoryController extends Controller
     private function rootDirectory()
     {
         $rootDirectories = scandir(APP_DEFAULT_DIR);
-        $rootParent = null;
         $i = 0;
         foreach($rootDirectories as $dir){
             if($dir[0]!="."){
                 $this->DirectoryModel->addDir($dir, null);
-            }
-            if(is_dir($dir) && $dir[0]!="."){
-                $rootDir[$i]["id"] = $this->DirectoryModel->getLastInsertId();
-                $rootDir[$i]["pathDirectory"] = APP_DEFAULT_DIR."\\".$dir;
+                $idDir = $this->DirectoryModel->getLastInsertId();
+                if(!is_dir($dir)){
+                    $size = filesize($dir);
+                    $this->DirectoryModel->saveSize($idDir, $size);
+                }else{
+                    $rootDir[$i]["id"] = $idDir;
+                    $rootDir[$i]["pathDirectory"] = APP_DEFAULT_DIR."\\".$dir;
+                    $rootDir[$i]["name"] = $dir;
+                }
+                clearstatcache();
             }
             ++$i;
         }
         return $rootDir;
     }
-    private function getDirectory($directory = array(), $parentDir = "")
+    private function getDirectory($directory = array())
     {
         if(!empty($directory)){
             $directories = scandir($directory["pathDirectory"]);
             foreach($directories as $dir){
                 if($dir[0]!="."){
                     $this->DirectoryModel->addDir($dir, $directory["id"]);
-                }
-                clearstatcache();
-                if(is_dir($directory["pathDirectory"]."/".$dir."/") && $dir[0]!="."){
-                    $childDir["id"] = $this->DirectoryModel->getLastInsertId();
-                    $childDir["pathDirectory"] = $directory["pathDirectory"]."\\".$dir;
-                    $this->getDirectory($childDir, $parentDir.$dir."/");
+                    $idDir = $this->DirectoryModel->getLastInsertId();
+                    if(!is_dir($directory["pathDirectory"]."/".$dir."/")){
+                        $size = filesize($directory["name"]."/".$dir);
+                        $this->DirectoryModel->saveSize($idDir, $size);
+                    }else{
+                        $childDir["id"] = $idDir;
+                        $childDir["pathDirectory"] = $directory["pathDirectory"]."\\".$dir;
+                        $childDir["name"] = $directory["name"]."/".$dir."/";
+                        $this->getDirectory($childDir);
+                    }
+                    clearstatcache();
                 }
             }
         }
@@ -70,9 +80,16 @@ class DirectoryController extends Controller
         if(!empty($id)){
             $directories = DirectoryModel::getDir($id);
             foreach($directories as $dir){
-                $html .= "<li>".$dir["name"]."<form method='post'>
+                if($dir["size"] == 0){
+                    $html .= "<li><b>".$dir["name"]."</b> "."- ".self::getSizeDir($dir["id"])."Kb"."<form method='post'>
                 <input type='hidden' name='idDel' value='$dir[id]' />
                 <input type='submit' class='float_r btn-mini btn btn-danger my-del' name='delDir' value='DEL' /></form>"."</li>"."<br />";
+                }else{
+                    $size = round($dir["size"]/1024,2);
+                    $html .= "<li>".$dir["name"]." -"." ".$size."Kb"."<form method='post'>
+                <input type='hidden' name='idDel' value='$dir[id]' />
+                <input type='submit' class='float_r btn-mini btn btn-danger my-del' name='delDir' value='DEL' /></form>"."</li>"."<br />";
+                }
                 $html .= self::getDir($dir["id"]);
             }
         }
@@ -87,6 +104,12 @@ class DirectoryController extends Controller
                 DirectoryModel::delDir($dir["id"]);
                 self::delDir($dir["id"]);
             }
+        }
+    }
+    public static function getSizeDir($id = "")
+    {
+        if(!empty($id)){
+
         }
     }
 }

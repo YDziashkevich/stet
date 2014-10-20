@@ -1,7 +1,31 @@
 <div class="center-text">
     <a href= "<?php echo APP_BASE_URL.'index.php'; ?>"  class='float_r btn-large btn btn-info my-link' style='margin-top: -30px; margin-right: 20px; color: white;'><i class="icon-home icon-white"></i>Return to home</a>
 </div><!-- center-text -->
+
 <div class="break"></div>
+<div id="search_st">
+<div class="row">
+    <div class="span12">
+
+        <div class="col-lg-3">
+            <div id="search_st_1"
+
+                <div class="input-group custom-search-form">
+                    <input type="text" class="form-control">
+              <span class="input-group-btn">
+              <button class="btn btn-default" type="button">
+                  <span class="glyphicon glyphicon-search"></span>
+              </button>
+             </span>
+                </div><!-- /input-group -->
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="break"></div>
+<div class="row">
 <div class="span12">
     <div class="center-text">
         <form method="post">
@@ -10,6 +34,18 @@
         </form>
     </div>
 </div>
+</div>
+
+<?php
+if(isset($root) && !empty($root)){
+    $html = "<div class='span12'>";
+    $html .= "<div class='center-text'>";
+    $html .= "<h4>Total space occupied:"." ".DirectoryModel::getTotalSize()."Kb"."</h4>"."</div>"."</div>";
+    echo $html;
+}
+?>
+
+
 <div clas="row">
 <div class="span12">
     <div class="dir-tree">
@@ -17,10 +53,17 @@
         <?php
         if(isset($root) && !empty($root)){
             foreach($root as $dir){
-                echo "<li>".$dir["name"]."<form method='post'>
+                if($dir["size"] == 0){
+                    echo "<li><b>".$dir["name"]."</b><form method='post'>
                 <input type='hidden' name='idDel' value='$dir[id]' />
                 <input type='submit' class='float_r btn-mini btn btn-danger my-del' name='delDir' value='DEL' /></form>"."</li>"."<br />";
-                echo DirectoryController::getDir($dir["id"]);
+                    echo DirectoryController::getDir($dir["id"]);
+                }else{
+                    $size = round($dir["size"]/1024,2);
+                    echo "<li>".$dir["name"]." -"." ".$size."Kb"."<form method='post'>
+                <input type='hidden' name='idDel' value='$dir[id]' />
+                <input type='submit' class='float_r btn-mini btn btn-danger my-del' name='delDir' value='DEL' /></form>"."</li>"."<br />";
+                }
             }
         }
         ?>
