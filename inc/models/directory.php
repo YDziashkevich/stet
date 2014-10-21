@@ -57,7 +57,7 @@ class DirectoryModel extends Model
     public static function getSize($id = "")
     {
         $dir = self::getDbc()->prepare("SELECT SUM(size) FROM st_directory WHERE parentId=:id");
-        $dir->execute(PDO::PARAM_INT);
+        $dir->execute(array(":id"=>$id));
         return $dir->fetchColumn();
     }
 }

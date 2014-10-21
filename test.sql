@@ -24,7 +24,6 @@ CREATE TABLE `st_directory` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `parentId` int(10) unsigned DEFAULT NULL,
-  `size` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

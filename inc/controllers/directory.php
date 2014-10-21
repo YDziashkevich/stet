@@ -108,8 +108,23 @@ class DirectoryController extends Controller
     }
     public static function getSizeDir($id = "")
     {
+        $sum = "";
         if(!empty($id)){
-
+            $directory = DirectoryModel::getDir($id);
+            $sum = DirectoryModel::getSize($id);
+            foreach($directory as $dir){
+                $sumDir = DirectoryModel::getSize($dir["id"]);
+                if(!empty($sumDir)){
+                    $newDirectory = DirectoryModel::getDir($dir["id"]);
+                    foreach($newDirectory as $newDir){
+                        $newSumDir = self::getSizeDir($newDir["id"]);
+                        $sum += $newSumDir;
+                    }
+                }
+                $sum += $sumDir;
+            }
         }
+        $sum = round($sum/1024, 2);
+        return $sum;
     }
 }

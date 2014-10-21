@@ -3,26 +3,20 @@
 </div><!-- center-text -->
 
 <div class="break"></div>
-<div id="search_st">
+
+<!-------------------------------------------------------->
 <div class="row">
     <div class="span12">
 
-        <div class="col-lg-3">
-            <div id="search_st_1"
-
-                <div class="input-group custom-search-form">
-                    <input type="text" class="form-control">
-              <span class="input-group-btn">
-              <button class="btn btn-default" type="button">
-                  <span class="glyphicon glyphicon-search"></span>
-              </button>
-             </span>
-                </div><!-- /input-group -->
-            </div>
-            </div>
+        <div class="input-append">
+            <input class="span2" id="appendedInputButtons" size="16" type="text"><button class="btn" type="button">Найти</button>
         </div>
+
+
     </div>
 </div>
+
+<!-------------------------------------------------------->
 
 <div class="break"></div>
 <div class="row">
@@ -54,7 +48,7 @@ if(isset($root) && !empty($root)){
         if(isset($root) && !empty($root)){
             foreach($root as $dir){
                 if($dir["size"] == 0){
-                    echo "<li><b>".$dir["name"]."</b><form method='post'>
+                    echo "<li><b>".$dir["name"]."</b> "."- ".DirectoryController::getSizeDir($dir["id"])."Kb"."<form method='post'>
                 <input type='hidden' name='idDel' value='$dir[id]' />
                 <input type='submit' class='float_r btn-mini btn btn-danger my-del' name='delDir' value='DEL' /></form>"."</li>"."<br />";
                     echo DirectoryController::getDir($dir["id"]);
