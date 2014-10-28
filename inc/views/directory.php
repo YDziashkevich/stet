@@ -5,17 +5,20 @@
 <div class="break"></div>
 
 <!-------------------------------------------------------->
-<div class="row">
-    <div class="span12">
 
-        <div class="input-append">
-            <input class="span2" id="appendedInputButtons" size="16" type="text"><button class="btn" type="button">Найти</button>
-        </div>
+<form class="form-search" method="post">
+    <input type="text" class="input-medium search-query" name="textSearch">
+    <input type="submit" class="btn" value="Search" name="search">
+</form>
 
 
-    </div>
-</div>
-
+<?php
+if(isset($search) && !empty($search)){
+    foreach($search as $dir){
+        echo $dir."<br/>";
+    }
+}
+?>
 <!-------------------------------------------------------->
 
 <div class="break"></div>

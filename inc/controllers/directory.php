@@ -9,6 +9,7 @@ class DirectoryController extends Controller
     }
     public function indexAction()
     {
+        $resultSearch = "";
         if(isset($_POST["delete"]) && !empty($_POST["delete"])){
             $this->DirectoryModel->clearTable();
             parent::redirect(APP_BASE_URL.'index.php?url=directory');
@@ -27,6 +28,10 @@ class DirectoryController extends Controller
             self::delDir($_POST["idDel"]);
             parent::redirect(APP_BASE_URL.'index.php?url=directory');
         }
+        if(isset($_POST["search"]) && !empty($_POST["search"])){
+            $resultSearch = $this->search($_POST["textSearch"]);
+        }
+        $data["search"] = $resultSearch;
         $this->view->render("directory", $data);
     }
     private function rootDirectory()
@@ -126,5 +131,39 @@ class DirectoryController extends Controller
         }
         $sum = round($sum/1024, 2);
         return $sum;
+    }
+    private function search($search)
+    {
+        $searchDir = $this->DirectoryModel->searchDir($search);
+        if(!empty($searchDir)){
+            $i = 0;
+            foreach($searchDir as $dir){
+                $html = "";
+                if($dir["parentId"] === null){
+                    $html .= "/".$dir["name"];
+                }else{
+                    $html .= $this->pathToDir($dir["parentId"]);
+                    $html .= "/".$dir["name"];
+                }
+                $result[$i] = $html;
+                ++$i;
+            }
+        }
+        else{
+            $result[] = "Nothing not found";
+        }
+        return  $result;
+    }
+    private function pathToDir($parentId = "")
+    {
+        $html = "";
+        if(!empty($parentId)){
+            $parentDir = $this->DirectoryModel->getParentDir($parentId);
+            $child = "/";
+            $child .= $parentDir["name"];
+            $parent =  $this->pathToDir($parentDir["parentId"]);
+            $html = $parent.$child;
+        }
+        return $html;
     }
 }

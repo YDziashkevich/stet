@@ -60,4 +60,19 @@ class DirectoryModel extends Model
         $dir->execute(array(":id"=>$id));
         return $dir->fetchColumn();
     }
+    public function searchDir($search = "")
+    {
+        $search1 = $search."%";
+        $search2 = "%".$search;
+        $search3 = "%".$search."%";
+        $dir = self::getDbc()->prepare("SELECT name, parentId FROM st_directory WHERE name LIKE :search1 OR name LIKE :search2 OR name LIKE :search3");
+        $dir->execute(array(":search1"=>$search1, ":search2"=>$search2, ":search3"=>$search3));
+        return $dir->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function getParentDir($parentId)
+    {
+        $dir = self::getDbc()->prepare("SELECT name, parentId FROM st_directory WHERE id=:id");
+        $dir->execute(array(":id"=>$parentId));
+        return $dir->fetch(PDO::FETCH_ASSOC);
+    }
 }
