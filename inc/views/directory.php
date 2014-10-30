@@ -5,7 +5,10 @@
 <div class="break"></div>
 
 <!-------------------------------------------------------->
+<div class="row">
+    <div class="span12 search-span12">
 
+<div id="search-st">
 <form class="form-search" method="post">
     <input type="text" class="input-medium search-query" name="textSearch">
     <input type="submit" class="btn" value="Search" name="search">
@@ -19,6 +22,9 @@ if(isset($search) && !empty($search)){
     }
 }
 ?>
+    </div>
+        </div>
+    </div>
 <!-------------------------------------------------------->
 
 <div class="break"></div>

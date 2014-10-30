@@ -33,3 +33,9 @@ ul.li.dir-tree{
     margin: 0;
     padding: 0;
 }
+#search-st{
+    width: 300px;
+    margin: 0 auto;
+}
+.search-span12{
+}
