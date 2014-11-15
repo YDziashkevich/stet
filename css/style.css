@@ -34,8 +34,47 @@ ul.li.dir-tree{
     padding: 0;
 }
 #search-st{
-    width: 300px;
+    width: 250px;
     margin: 0 auto;
 }
-.search-span12{
+.my-small-link{
+    width: 100px;
+}
+.right-text{
+    text-align: right;
+}
+.btn-grey{
+    background-color: #DDDDDD;
+    color: #000000;
+}
+.head-list{
+    width: 200px;
+}
+.table-list{
+    width:  800px;
+    margin: 0 auto;
+}
+.th-st{
+    background-color: #DDDDDD;
+    width: 200px;
+    text-align: center;
+    border-right: solid #fcfcfc 2px;
+    border-left: solid #fcfcfc 2px;
+}
+#list-st{
+    width: 840px;
+    margin: 0 auto;
+}
+.small-break{
+    height: 25px;
+}
+.table-head-st{
+    color: #000000;
+    margin: 0 auto;
+}
+.th-input{
+    background-color: #DDDDDD;
+    width: 20px;
+    border-right: solid #fcfcfc 2px;
+    border-left: solid #fcfcfc 2px;
 }
