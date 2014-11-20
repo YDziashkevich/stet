@@ -1,0 +1,5 @@
+<?
+class ListModel extends Model
+{
+
+}

@@ -3,3 +3,7 @@
 1
 1
 3
+<input type="submit" class='float_r btn-large btn btn-warning my-small-link'
+                           style='margin-top: -30px; margin-right: 20px; color: white;' name="create" value="Edit">
+                    <input type="submit" class='float_r btn-large btn btn-danger my-small-link'
+                           style='margin-top: -30px; margin-right: 20px; color: white;' name="delete" value="Remove">
